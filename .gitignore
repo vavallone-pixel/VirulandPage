@@ -1,0 +1,16 @@
+# Sistema operativo
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+desktop.ini
+ehthumbs.db
+
+# Editores
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# Claude Code
+.claude/
