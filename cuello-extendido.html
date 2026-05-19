@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cuello Extendido — Viruland</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cinzel+Decorative:wght@400;700&family=Jost:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <button class="lightbox-close">✕</button>
+    <img id="lightbox-img" src="" alt="" style="display:none" onclick="event.stopPropagation()"/>
+    <video id="lightbox-vid" controls playsinline style="display:none" onclick="event.stopPropagation()"></video>
+  </div>
+
+  <header>
+    <div class="logo-deco fade-up"><div class="deco-line"></div><div class="deco-diamond"></div><div class="deco-line right"></div></div>
+    <h1 class="fade-up">Viruland</h1>
+    <p class="tagline fade-up">Tejidos únicos e irrepetibles · hechos con amor</p>
+  </header>
+
+  <nav>
+    <a href="index.html#cardigans">Cardigans</a>
+    <a href="index.html#gorros">Gorros / Cuellitos</a>
+    <a href="index.html#carteras">Carteras</a>
+    <a href="index.html#nosotras">Sobre mí</a>
+    <a href="index.html#contacto">Contacto</a>
+  </nav>
+
+  <div class="page-wrap">
+    <a href="index.html" class="back-link">← Volver al catálogo</a>
+
+    <div class="product-layout">
+
+      <div>
+        <div class="carousel-main" id="carousel-main"></div>
+        <div class="carousel-thumbs" id="carousel-thumbs"></div>
+      </div>
+
+      <div class="product-detail">
+        <div class="detail-tags">
+          <span class="stock-tag tag-stock">En stock</span>
+        </div>
+        <h2 class="detail-name">Cuello Extendido · Único e Irrepetible</h2>
+        <div class="detail-meta">
+          <span>Cuello · Tejido a mano</span>
+          <span>Talle Único</span>
+        </div>
+        <div class="detail-price">$ 50.000</div>
+        <p class="detail-price-note">Precio con transferencia bancaria</p>
+
+        <div class="detail-section">
+          <h3>Descripción</h3>
+          <p>Cuello tejido a crochet que se puede usar de forma extendida para máxima calidez y cobertura. Perfecto para resguardarte en los días más fríos.</p>
+        </div>
+
+        <div class="detail-section">
+          <h3>Cuidados</h3>
+          <ul>
+            <li>Lavado a mano con agua fría</li>
+            <li>No usar secadora</li>
+            <li>Secar en plano, a la sombra</li>
+            <li>Planchar con vapor a baja temperatura si es necesario</li>
+          </ul>
+        </div>
+
+        <div class="detail-section">
+          <h3>Envío</h3>
+          <p>Envío por correo a todo el país · Entrega en mano en CABA y GBA</p>
+        </div>
+
+        <div class="detail-section">
+          <h3>Medios de pago</h3>
+          <p>El precio indicado es para pago por transferencia bancaria.</p>
+          <p>Si preferís pagar en cuotas, podés hacerlo a través de Mercado Libre — aunque aplica un cargo adicional por el servicio.</p>
+        </div>
+
+        <div class="detail-section">
+          <h3>Talle</h3>
+          <p>Esta pieza es Talle Único, pensada para adaptarse a distintas siluetas. ¿Querés algo similar en otro talle? Escribime y lo hacemos a medida.</p>
+        </div>
+
+        <div class="detail-actions">
+          <a href="https://wa.me/5491172391267?text=Hola!%20Vi%20el%20Cuello%20Extendido%20en%20viruland.com.ar%20y%20quiero%20m%C3%A1s%20info%20%F0%9F%A7%B6" target="_blank" class="btn btn-wa">💬 Consultar por WhatsApp</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-logo">Viruland</div>
+    <p>Tejidos únicos e irrepetibles · Buenos Aires, Argentina</p>
+  </footer>
+
+  <script>
+    const media = [
+      { type: 'image', src: 'fotos/cuelloextendido.jpeg' },
+      { type: 'video', src: 'fotos/cuelloextendido.mp4' },
+    ];
+    let current = 0;
+
+    function renderMain(i) {
+      current = i;
+      const item = media[i];
+      const main = document.getElementById('carousel-main');
+      if (item.type === 'video') {
+        main.innerHTML = `<video muted loop playsinline preload="metadata"><source src="${item.src}" type="video/mp4"></video>`;
+        const vid = main.querySelector('video');
+        vid.addEventListener('loadedmetadata', () => {
+          if (vid.duration && isFinite(vid.duration)) vid.currentTime = vid.duration / 2;
+        });
+      } else {
+        main.innerHTML = `<img src="${item.src}" alt="Viruland"/>`;
+      }
+      document.querySelectorAll('.thumb-item').forEach((el, j) => el.classList.toggle('active', j === i));
+    }
+
+    function buildThumbs() {
+      const strip = document.getElementById('carousel-thumbs');
+      media.forEach((item, i) => {
+        const div = document.createElement('div');
+        div.className = 'thumb-item' + (i === 0 ? ' active' : '') + (item.type === 'video' ? ' video-thumb' : '');
+        div.innerHTML = item.type === 'video' ? '▶' : `<img src="${item.src}" alt=""/>`;
+        div.onclick = () => renderMain(i);
+        strip.appendChild(div);
+      });
+    }
+
+    document.getElementById('carousel-main').addEventListener('click', () => {
+      const item = media[current];
+      openLightbox(item.src, item.type);
+    });
+
+    function openLightbox(src, type) {
+      const img = document.getElementById('lightbox-img');
+      const vid = document.getElementById('lightbox-vid');
+      if (type === 'video') {
+        vid.src = src; vid.style.display = 'block'; img.style.display = 'none'; vid.play();
+      } else {
+        img.src = src; img.style.display = 'block'; vid.style.display = 'none';
+      }
+      document.getElementById('lightbox').classList.add('open');
+    }
+    function closeLightbox() {
+      const vid = document.getElementById('lightbox-vid');
+      vid.pause(); vid.src = '';
+      document.getElementById('lightbox').classList.remove('open');
+    }
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+
+    buildThumbs();
+    renderMain(0);
+
+    document.querySelectorAll('.detail-section').forEach(section => {
+      const h3 = section.querySelector('h3');
+      const body = document.createElement('div');
+      body.className = 'detail-section-body';
+      while (section.children.length > 1) body.appendChild(section.children[1]);
+      section.appendChild(body);
+      h3.addEventListener('click', () => section.classList.toggle('open'));
+    });
+  </script>
+</body>
+</html>
